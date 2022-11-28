@@ -1,0 +1,7 @@
+C:\Users\Admin\source\repos\CubeServerTest\CubeServerTest\bin\Debug\CubeServerTest.exe.config
+C:\Users\Admin\source\repos\CubeServerTest\CubeServerTest\bin\Debug\CubeServerTest.exe
+C:\Users\Admin\source\repos\CubeServerTest\CubeServerTest\bin\Debug\CubeServerTest.pdb
+C:\Users\Admin\source\repos\CubeServerTest\CubeServerTest\obj\Debug\CubeServerTest.csproj.AssemblyReference.cache
+C:\Users\Admin\source\repos\CubeServerTest\CubeServerTest\obj\Debug\CubeServerTest.csproj.CoreCompileInputs.cache
+C:\Users\Admin\source\repos\CubeServerTest\CubeServerTest\obj\Debug\CubeServerTest.exe
+C:\Users\Admin\source\repos\CubeServerTest\CubeServerTest\obj\Debug\CubeServerTest.pdb
