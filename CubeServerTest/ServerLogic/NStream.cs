@@ -15,7 +15,8 @@ namespace CubeServerTest
         //StreamReader reader;
         //StreamWriter writer;
         const int bufferSize = 4096;
-        byte[] buffer = new byte[bufferSize];
+        byte[] readBuffer = new byte[bufferSize];
+        byte[] writeBuffer = new byte[bufferSize];
         public NStream(NetworkStream stream)
         {
             this.stream = stream;
@@ -28,34 +29,169 @@ namespace CubeServerTest
             //if (reader != null) reader.Close();
             if (stream != null) stream.Close();
         }
-        public int Readprotocol()
+        #region Read
+        public bool Read(out Protocol protocol)
         {
             if (stream == null)
             {
-                return -1;
+                protocol = Protocol.INVALID;
+                return false;
             }
-            int packetSize = stream.Read(buffer, 0, sizeof(int));
-            if (packetSize <= 0) 
+            if (readBuffer == null)
             {
-                return -1; 
+                readBuffer = new byte[bufferSize];
             }
-            int dataSize = stream.Read(buffer, 0, sizeof(Protocol));
-            if (dataSize <= 0)
+            Array.Clear(readBuffer, 0, bufferSize);
+            int readSize = stream.Read(readBuffer, 0, sizeof(int));
+            if (readSize <= 0)
             {
-                return -1;
+                protocol = Protocol.INVALID;
+                return false;
             }
-            return dataSize;
+            int pivot = 0;
+            int packetSize = BitConverter.ToInt32(readBuffer, pivot);
+            pivot += sizeof(int);
+            if (readBuffer == null)
+            {
+                protocol = Protocol.INVALID;
+                return false;
+            }
+            readSize = stream.Read(readBuffer, pivot, packetSize);
+            if (readSize <= 0)
+            {
+                protocol = Protocol.INVALID;
+                return false;
+            }
+            protocol = (Protocol)BitConverter.ToInt32(readBuffer, pivot);
+            pivot += sizeof(Protocol);
+            return true;
         }
-        public int Read(int size)
+        public bool Read(out Protocol protocol, out byte[] data)
         {
-            if (stream == null) return -1;
-
+            if (stream == null)
+            {
+                protocol = Protocol.INVALID;
+                data = null;
+                return false;
+            }
+            if (readBuffer == null)
+            {
+                readBuffer = new byte[bufferSize];
+            }
+            Array.Clear(readBuffer, 0, bufferSize);
+            int readSize = stream.Read(readBuffer, 0, sizeof(int));
+            if (readSize <= 0)
+            {
+                protocol = Protocol.INVALID;
+                data = null;
+                return false;
+            }
+            int pivot = 0;
+            int packetSize = BitConverter.ToInt32(readBuffer, pivot);
+            pivot += sizeof(int);
+            if (readBuffer == null)
+            {
+                protocol = Protocol.INVALID;
+                data = null;
+                return false;
+            }
+            readSize = stream.Read(readBuffer, pivot, packetSize);
+            if (readSize <= 0)
+            {
+                protocol = Protocol.INVALID;
+                data = null;
+                return false;
+            }
+            protocol = (Protocol)BitConverter.ToInt32(readBuffer, pivot);
+            pivot += sizeof(Protocol);
+            readSize = stream.Read(readBuffer, pivot, sizeof(int));
+            if (readSize <= 0)
+            {
+                protocol = Protocol.INVALID;
+                data = null;
+                return false;
+            }
+            int dataSize = BitConverter.ToInt32(readBuffer, pivot);
+            pivot += sizeof(int);
+            readSize = stream.Read(readBuffer, pivot, dataSize);
+            if (readSize <= 0)
+            {
+                protocol = Protocol.INVALID;
+                data = null;
+                return false;
+            }
+            data = new byte[bufferSize];
+            Array.Copy(readBuffer, pivot, data, 0, dataSize);
+            return true;
         }
-        public void Write()
+        #endregion
+        #region Write
+        public bool Write(Protocol protocol)
         {
-            string msg = "Hello World!";
-            buffer = Encoding.ASCII.GetBytes(msg);
-            //writer.WriteLine(buffer);
+            if (stream == null)
+            {
+                return false;
+            }
+            if (writeBuffer == null)
+            {
+                writeBuffer = new byte[bufferSize];
+            }
+            Array.Clear(writeBuffer, 0, bufferSize);
+            int packetSize = sizeof(int);
+            if (writeBuffer == null) 
+            {
+                writeBuffer = new byte[bufferSize];
+            }
+            BitConverter.GetBytes((int)protocol).CopyTo(writeBuffer, packetSize);
+            packetSize += sizeof(Protocol);
+            if (writeBuffer == null)
+            {
+                writeBuffer = new byte[bufferSize];
+            }
+            BitConverter.GetBytes(packetSize - sizeof(int)).CopyTo(writeBuffer, 0);
+            stream.Write(writeBuffer, 0, packetSize);
+            return true;
         }
+        public bool Write(Protocol protocol, byte[] data)
+        {
+            int leftSize = data.Length;
+            if (stream == null)
+            {
+                return false;
+            }
+            if (writeBuffer == null)
+            {
+                writeBuffer = new byte[bufferSize];
+            }
+            Array.Clear(writeBuffer, 0, bufferSize);
+            int packetSize = sizeof(int);
+            if (writeBuffer == null)
+            {
+                writeBuffer = new byte[bufferSize];
+            }
+            BitConverter.GetBytes((int)protocol).CopyTo(writeBuffer, packetSize);
+            packetSize += sizeof(Protocol);
+            int dataSize = data.Length;
+            if (writeBuffer == null)
+            {
+                writeBuffer = new byte[bufferSize];
+            }
+            BitConverter.GetBytes(dataSize).CopyTo(writeBuffer, packetSize);
+            packetSize += sizeof(int);
+            if (writeBuffer == null)
+            {
+                writeBuffer = new byte[bufferSize];
+            }
+            data.CopyTo(writeBuffer, packetSize);
+            packetSize += dataSize;
+            if (writeBuffer == null)
+            {
+                writeBuffer = new byte[bufferSize];
+            }
+            BitConverter.GetBytes(packetSize - sizeof(int)).CopyTo(writeBuffer, 0);
+            stream.Write(writeBuffer, 0, packetSize);
+            return true;
+        }
+        #endregion
     }
 }

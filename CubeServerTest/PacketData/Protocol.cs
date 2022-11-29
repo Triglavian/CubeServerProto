@@ -10,6 +10,7 @@ namespace CubeServerTest.PacketData
     {
         DISCONNECTED,
         INVALID,
+        WAIT,
         REQ_STAGELIST,
         RES_STAGELIST,
         REQ_STAGE,
