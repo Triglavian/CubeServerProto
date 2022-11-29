@@ -23,13 +23,12 @@ namespace CubeServerTest
         {
             this.client = client;
             Thread commBase = new Thread(MainLogic);
+            stream = new NStream(this.client.GetStream());   
             commBase.Start();
         }
         void MainLogic()
         {
-            stream = new NStream(client.GetStream());
-            stream.Read();
-            //stream.Write();
+
         }
         private ClientCommunication(ClientCommunication obj) { }
     }

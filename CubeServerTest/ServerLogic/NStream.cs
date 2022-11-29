@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CubeServerTest.PacketData;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,22 +28,29 @@ namespace CubeServerTest
             //if (reader != null) reader.Close();
             if (stream != null) stream.Close();
         }
-        public void Read()
+        public int Readprotocol()
         {
-            //stream.Read
-
-            Console.WriteLine(buffer);
+            if (stream == null)
+            {
+                return -1;
+            }
+            int packetSize = stream.Read(buffer, 0, sizeof(int));
+            if (packetSize <= 0) 
+            {
+                return -1; 
+            }
+            int dataSize = stream.Read(buffer, 0, sizeof(Protocol));
+            if (dataSize <= 0)
+            {
+                return -1;
+            }
+            return dataSize;
         }
-        //public int ReadProtocol()
-        //{
-        //    //return stream.Read(buffer, 0, sizeof(int) + sizeof(PacketData.Protocol));
-        //    return 0;
-        //}
-        //public int Read(int size)
-        //{
-        //    //return stream.Read(buffer, 0, size);
-        //    reader.ReadLine();
-        //}
+        public int Read(int size)
+        {
+            if (stream == null) return -1;
+
+        }
         public void Write()
         {
             string msg = "Hello World!";
