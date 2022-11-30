@@ -8,8 +8,10 @@ namespace CubeServerTest.State
 {
     public enum CustomState
     {
+        INVALID,
         IDLE,
         REQSTLIST,
         REQSTAGE,
+        EXIT,
     }
 }

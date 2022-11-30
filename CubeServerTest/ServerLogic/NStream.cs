@@ -66,6 +66,65 @@ namespace CubeServerTest
             pivot += sizeof(Protocol);
             return true;
         }
+        public bool Read(out Protocol protocol, out int data)
+        {
+            if (stream == null)
+            {
+                protocol = Protocol.INVALID;
+                data = 0;
+                return false;
+            }
+            if (readBuffer == null)
+            {
+                readBuffer = new byte[bufferSize];
+            }
+            Array.Clear(readBuffer, 0, bufferSize);
+            int readSize = stream.Read(readBuffer, 0, sizeof(int));
+            if (readSize <= 0)
+            {
+                protocol = Protocol.INVALID;
+                data = 0;
+                return false;
+            }
+            int pivot = 0;
+            int packetSize = BitConverter.ToInt32(readBuffer, pivot);
+            pivot += sizeof(int);
+            if (readBuffer == null)
+            {
+                protocol = Protocol.INVALID;
+                data = 0;
+                return false;
+            }
+            readSize = stream.Read(readBuffer, pivot, packetSize);
+            if (readSize <= 0)
+            {
+                protocol = Protocol.INVALID;
+                data = 0;
+                return false;
+            }
+            protocol = (Protocol)BitConverter.ToInt32(readBuffer, pivot);
+            pivot += sizeof(Protocol);
+            readSize = stream.Read(readBuffer, pivot, sizeof(int));
+            if (readSize <= 0)
+            {
+                protocol = Protocol.INVALID;
+                data = 0;
+                return false;
+            }
+            int dataSize = BitConverter.ToInt32(readBuffer, pivot);
+            pivot += sizeof(int);
+            readSize = stream.Read(readBuffer, pivot, dataSize);
+            if (readSize <= 0)
+            {
+                protocol = Protocol.INVALID;
+                data = 0;
+                return false;
+            }
+            byte[] tempBuffer = new byte[sizeof(int)];
+            Array.Copy(readBuffer, pivot, tempBuffer, 0, dataSize);
+            data = int.Parse(tempBuffer.ToString());
+            return true;
+        }
         public bool Read(out Protocol protocol, out byte[] data)
         {
             if (stream == null)
@@ -152,6 +211,45 @@ namespace CubeServerTest
             stream.Write(writeBuffer, 0, packetSize);
             return true;
         }
+        public bool Write(Protocol protocol, int data)
+        {
+            if (stream == null)
+            {
+                return false;
+            }
+            if (writeBuffer == null)
+            {
+                writeBuffer = new byte[bufferSize];
+            }
+            Array.Clear(writeBuffer, 0, bufferSize);
+            int packetSize = sizeof(int);
+            if (writeBuffer == null)
+            {
+                writeBuffer = new byte[bufferSize];
+            }
+            BitConverter.GetBytes((int)protocol).CopyTo(writeBuffer, packetSize);
+            packetSize += sizeof(Protocol);
+            int dataSize = sizeof(int);
+            if (writeBuffer == null)
+            {
+                writeBuffer = new byte[bufferSize];
+            }
+            BitConverter.GetBytes(dataSize).CopyTo(writeBuffer, packetSize);
+            packetSize += sizeof(int);
+            if (writeBuffer == null)
+            {
+                writeBuffer = new byte[bufferSize];
+            }
+            BitConverter.GetBytes(data).CopyTo(writeBuffer, packetSize);
+            packetSize += dataSize;
+            if (writeBuffer == null)
+            {
+                writeBuffer = new byte[bufferSize];
+            }
+            BitConverter.GetBytes(packetSize - sizeof(int)).CopyTo(writeBuffer, 0);
+            stream.Write(writeBuffer, 0, packetSize);
+            return true;
+        }
         public bool Write(Protocol protocol, byte[] data)
         {
             int leftSize = data.Length;
@@ -193,5 +291,9 @@ namespace CubeServerTest
             return true;
         }
         #endregion
+        public int GetBufferSize()
+        {
+            return bufferSize;
+        }
     }
 }

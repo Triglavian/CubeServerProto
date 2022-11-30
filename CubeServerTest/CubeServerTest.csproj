@@ -43,6 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ServerLogic\ClientData\ClientMainData.cs" />
+    <Compile Include="ServerLogic\ClientData\CustomManagerData.cs" />
+    <Compile Include="ServerLogic\FileManager.cs" />
+    <Compile Include="ServerLogic\Service\CustomStageManager.cs" />
     <Compile Include="ServerLogic\NStream.cs" />
     <Compile Include="PacketData\Protocol.cs" />
     <Compile Include="ServerLogic\ClientCommunication.cs" />

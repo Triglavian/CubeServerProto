@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
+using CubeServerTest.ServerLogic;
 
 namespace CubeServerTest
 {
@@ -42,6 +43,10 @@ namespace CubeServerTest
         {
             listener = new TcpListener(IPAddress.Any, port);
             if (listener == null) return false;
+            if (FileManager.GetInstance() is null) 
+            {
+                return false;
+            }
             listener.Start();
             return true;
         }

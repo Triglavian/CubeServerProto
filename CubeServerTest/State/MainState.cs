@@ -8,7 +8,9 @@ namespace CubeServerTest.State
 {
     public enum MainState
     {
+        INVALID,
         IDLE,
         CUSTOM,
+        EXIT,
     }
 }
