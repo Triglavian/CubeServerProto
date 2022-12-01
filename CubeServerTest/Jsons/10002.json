@@ -1,1 +1,1 @@
-{"stageId":10002,"objectData":[{"type":LASER_TRIGGER,"cubeIndex":0,"wallIndex":0,"color":RED},{"type":LASER_TRIGGER,"cubeIndex":15,"wallIndex":1,"color":RED},{"type":LASER_PROJECTOR,"cubeIndex":18,"wallIndex":1,"color":GREEN},{"type":LASER_PROJECTOR,"cubeIndex":25,"wallIndex":1,"color":RED},]}
+{"stageId":10002,"objectData":[{"type":1,"cubeIndex":0,"wallIndex":0,"color":0},{"type":1,"cubeIndex":15,"wallIndex":1,"color":0},{"type":0,"cubeIndex":18,"wallIndex":1,"color":1},{"type":0,"cubeIndex":25,"wallIndex":1,"color":0}]}

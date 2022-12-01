@@ -12,6 +12,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,16 +47,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PacketData\StageDataConverter.cs" />
+    <Compile Include="PacketData\LaserProjectorData.cs" />
     <Compile Include="ServerLogic\ClientData\ClientMainData.cs" />
     <Compile Include="ServerLogic\ClientData\CustomManagerData.cs" />
+    <Compile Include="ServerLogic\DataIO\JsonReader.cs" />
+    <Compile Include="ServerLogic\DataIO\JsonWriter.cs" />
     <Compile Include="ServerLogic\FileManager.cs" />
+    <Compile Include="PacketData\LaserTriggerData.cs" />
     <Compile Include="ServerLogic\Service\CustomStageManager.cs" />
     <Compile Include="ServerLogic\NStream.cs" />
     <Compile Include="PacketData\Protocol.cs" />
     <Compile Include="ServerLogic\ClientCommunication.cs" />
     <Compile Include="PacketData\LaserColor.cs" />
-    <Compile Include="PacketData\LaserProjectorData.cs" />
-    <Compile Include="PacketData\LaserTriggerData.cs" />
     <Compile Include="PacketData\ObjectType.cs" />
     <Compile Include="ServerLogic\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -65,6 +72,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Jsons\0.json" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

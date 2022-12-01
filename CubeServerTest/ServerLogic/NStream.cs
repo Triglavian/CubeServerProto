@@ -56,7 +56,7 @@ namespace CubeServerTest
                 protocol = Protocol.INVALID;
                 return false;
             }
-            readSize = stream.Read(readBuffer, pivot, packetSize);
+            readSize = stream.Read(readBuffer, pivot, sizeof(Protocol));
             if (readSize <= 0)
             {
                 protocol = Protocol.INVALID;
@@ -95,7 +95,7 @@ namespace CubeServerTest
                 data = 0;
                 return false;
             }
-            readSize = stream.Read(readBuffer, pivot, packetSize);
+            readSize = stream.Read(readBuffer, pivot, sizeof(Protocol));
             if (readSize <= 0)
             {
                 protocol = Protocol.INVALID;
@@ -120,9 +120,10 @@ namespace CubeServerTest
                 data = 0;
                 return false;
             }
-            byte[] tempBuffer = new byte[sizeof(int)];
-            Array.Copy(readBuffer, pivot, tempBuffer, 0, dataSize);
-            data = int.Parse(tempBuffer.ToString());
+            //byte[] tempBuffer = new byte[sizeof(int)];
+            //Array.Copy(readBuffer, pivot, tempBuffer, 0, dataSize);
+            //data = int.Parse(tempBuffer.ToString());
+            data = BitConverter.ToInt32(readBuffer, pivot);
             return true;
         }
         public bool Read(out Protocol protocol, out byte[] data)
@@ -154,7 +155,7 @@ namespace CubeServerTest
                 data = null;
                 return false;
             }
-            readSize = stream.Read(readBuffer, pivot, packetSize);
+            readSize = stream.Read(readBuffer, pivot, sizeof(Protocol));
             if (readSize <= 0)
             {
                 protocol = Protocol.INVALID;
@@ -280,8 +281,9 @@ namespace CubeServerTest
             {
                 writeBuffer = new byte[bufferSize];
             }
-            data.CopyTo(writeBuffer, packetSize);
-            packetSize += dataSize;
+            //data.CopyTo(writeBuffer, packetSize);
+            Array.Copy(data, 0, writeBuffer, packetSize, data.Length);
+            packetSize += data.Length;
             if (writeBuffer == null)
             {
                 writeBuffer = new byte[bufferSize];

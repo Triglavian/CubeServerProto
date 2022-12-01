@@ -5,3 +5,6 @@ C:\Users\Admin\source\repos\CubeServerTest\CubeServerTest\obj\Debug\CubeServerTe
 C:\Users\Admin\source\repos\CubeServerTest\CubeServerTest\obj\Debug\CubeServerTest.csproj.CoreCompileInputs.cache
 C:\Users\Admin\source\repos\CubeServerTest\CubeServerTest\obj\Debug\CubeServerTest.exe
 C:\Users\Admin\source\repos\CubeServerTest\CubeServerTest\obj\Debug\CubeServerTest.pdb
+C:\Users\Admin\source\repos\CubeServerTest\CubeServerTest\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Admin\source\repos\CubeServerTest\CubeServerTest\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Admin\source\repos\CubeServerTest\CubeServerTest\obj\Debug\CubeServerTest.csproj.CopyComplete

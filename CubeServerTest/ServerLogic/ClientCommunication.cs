@@ -72,7 +72,11 @@ namespace CubeServerTest
         }
         void SwitchState()
         {
-            stream.Read(out data.protocol);
+            if(stream.Read(out data.protocol) == false)
+            {
+                state = MainState.EXIT;
+                return;
+            }
             switch (data.protocol)
             {
                 case Protocol.ENT_CUSTOM:

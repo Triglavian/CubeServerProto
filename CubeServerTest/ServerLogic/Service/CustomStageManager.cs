@@ -49,7 +49,11 @@ namespace CubeServerTest.ServerLogic
         }
         void WriteStageData()
         {
-            stream.Read(out data.protocol, out data.id);
+            if (stream.Read(out data.protocol, out data.id) == false) 
+            {
+                state = CustomState.EXIT;
+                return;
+            }
             if (data.protocol != Protocol.REQ_STAGE)
             {
                 Console.WriteLine("InvalidProtocol, WriteStageData()");
@@ -57,7 +61,7 @@ namespace CubeServerTest.ServerLogic
                 return;
             }
             data.buffer = FileManager.GetInstance().GetStageData(data.id);
-            stream.Write(Protocol.RES_STAGELIST, data.buffer);
+            stream.Write(Protocol.RES_STAGE, data.buffer);
             state = CustomState.IDLE;
         }
         void WriteStageList()
@@ -71,10 +75,10 @@ namespace CubeServerTest.ServerLogic
             switch (data.protocol)
             {
                 case Protocol.REQ_STAGELIST:
-                    state = CustomState.REQSTAGE;
+                    state = CustomState.REQSTLIST;
                     break;
                 case Protocol.REQ_STAGE:
-                    state = CustomState.REQSTLIST;
+                    state = CustomState.REQSTAGE;
                     break;
                 default:
                     state = CustomState.INVALID;

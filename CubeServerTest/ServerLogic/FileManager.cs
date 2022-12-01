@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using System.IO;
+using CubeServerTest.ServerLogic.DataIO;
 
 namespace CubeServerTest.ServerLogic
 {
@@ -36,7 +37,9 @@ namespace CubeServerTest.ServerLogic
             {
                 return null;
             }
-            return null;
+            //JsonReader reader = new JsonReader();
+            //reader.Convert(fileDirectory);
+            return JsonReader.Convert(fileDirectory);
         }
         private FileManager()
         {
@@ -55,7 +58,7 @@ namespace CubeServerTest.ServerLogic
             foreach (var file in (direc.GetFiles()))
             {
                 string[] token = file.Name.Split('.');
-                stageData.Add(int.Parse(token[0]), file.DirectoryName);
+                stageData.Add(int.Parse(token[0]), file.DirectoryName + "\\" + file.Name);
                 Console.WriteLine("Add {0}, {1}", file.Name, file.DirectoryName);
             }
             foreach (var a in stageData)
